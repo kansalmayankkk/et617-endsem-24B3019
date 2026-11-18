@@ -90,6 +90,7 @@ th{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.03
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
 .review-item{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;background:#fff}
 .rule-table td:first-child{font-weight:700;white-space:nowrap}
+html,body{overflow-x:hidden} .card,.fb,.remed,.decision{overflow-wrap:anywhere}
 @media (max-width:560px){
   body{font-size:16px} h1{font-size:22px} .q-prompt{font-size:17px}
   .nav a{padding:6px 8px;font-size:14px}

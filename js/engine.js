@@ -140,7 +140,8 @@ var Engine = (function () {
 
     // Rule 3: HARDER
     if (res.correct) {
-      if (stu.mode.type === 'followup') { d.evidence.push('Follow-up on ' + stu.mode.tag + ' answered correctly'); stu.mode = { type: 'normal' }; }
+      var fixedTag = null;
+      if (stu.mode.type === 'followup') { fixedTag = stu.mode.tag; d.evidence.push('Follow-up on ' + stu.mode.tag + ' answered correctly'); stu.mode = { type: 'normal' }; }
       c.streak = hints <= 1 ? c.streak + 1 : 0;
       d.evidence.push('Correct-in-a-row at level ' + c.level + ': ' + c.streak);
       if (c.level === 3 && hints <= 1) {
@@ -157,7 +158,8 @@ var Engine = (function () {
         d.reason = 'You answered 2 in a row correctly with at most 1 hint. You are ready for a more challenging problem.';
         return go(stu, d, concept, 'question');
       }
-      d.rule = 'PRACTISE'; d.title = 'Correct! One more to level up';
+      d.rule = 'PRACTISE'; d.title = fixedTag ? 'Mistake fixed! Back to regular practice' : 'Correct! One more to level up';
+      if (fixedTag) { d.reason = 'You answered the targeted follow-up correctly, so the "' + MISCONCEPTIONS[fixedTag].name + '" mistake looks fixed. Now continue at your level. One more correct answer unlocks a harder question.'; return go(stu, d, concept, 'question'); }
       d.reason = hints > 1 ? 'Correct, but you used ' + hints + ' hints. Try a similar one with fewer hints to move up.' : 'One more correct answer at this level will unlock a harder question.';
       return go(stu, d, concept, 'question');
     }

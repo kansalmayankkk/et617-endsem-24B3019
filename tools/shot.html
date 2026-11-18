@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- Test/screenshot driver: opens the real app and scripts learner interactions. Not part of the learner UI. -->
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PercentPath driver</title>
+<link rel="stylesheet" href="../css/styles.css"></head>
+<body>
+<header class="topbar"><a href="#/welcome" class="brand"><span class="logo">%</span> PercentPath</a>
+<nav class="nav"><a href="#/welcome" data-nav="welcome">Learner</a><a href="#/summary" data-nav="summary">Progress</a><a href="#/teacher" data-nav="teacher">Teacher</a><a href="#/about" data-nav="about">About</a></nav></header>
+<div id="progressWrap" class="progress-wrap" hidden><div class="progress-label" id="progressLabel"></div><div class="progress"><div id="progressBar" class="progress-bar"></div></div><div id="conceptMap" class="concept-map"></div></div>
+<main id="app" tabindex="-1"></main>
+<footer class="footer">PercentPath · ET617 End-Sem · Roll No: <strong id="rollNo">24B3019</strong> · P4–T9–L2–C5 · Rule-based adaptive tutor (no AI model used)</footer>
+<script>try{localStorage.clear()}catch(e){} location.hash='#/welcome';
+window.addEventListener('hashchange', function (e) { if (e.isTrusted) e.stopImmediatePropagation(); });</script>
+<script src="../js/config.js"></script><script src="../js/content.js"></script><script src="../js/store.js"></script>
+<script src="../js/engine.js"></script><script src="../js/widgets.js"></script><script src="../js/teacher.js"></script><script src="../js/app.js"></script>
+<script>
+var P = new URLSearchParams(location.search), S = P.get('s') || 'A', STOP = P.get('stop') || 'end';
+var $ = function (q) { return document.querySelector(q); };
+var lastHash = '';
+function pickProfile(id) { $('[data-id="' + id + '"]').click(); }
+function answer(v) {
+  if (typeof v === 'number') { document.querySelectorAll('input[name=opt]')[v].checked = true; }
+  else $('#ans').value = v;
+  $('#submitBtn').click();
+}
+function cont(sel) { var b = $(sel || '#nextBtn') || $('#contBtn') || $('#startBtn') || $('#practiceBtn'); if (b) b.click(); }
+function steps(list) {
+  for (var i = 0; i < list.length; i++) {
+    var s = list[i];
+    if (s === STOP) return;
+    if (s[0] === 'a') answer(s[1]); else if (s[0] === 'c') cont(s[1]); else if (s[0] === 'f') s[1]();
+    if (location.hash !== lastHash) { lastHash = location.hash; window.dispatchEvent(new HashChangeEvent('hashchange')); }
+  }
+}
+function diag(ans) { var r = []; ans.forEach(function (a) { r.push(['a', a]); r.push(['c', '#nextBtn']); }); r.push(['c', '#startBtn']); return r; }
+window.onload = function () {
+  try {
+    var plan = [];
+    if (S === 'W' || S === 'about') { if (S === 'about') { location.hash = '#/about'; window.dispatchEvent(new HashChangeEvent('hashchange')); } throw 0; }
+    pickProfile('aarav'); window.dispatchEvent(new HashChangeEvent('hashchange'));
+    if (S === 'A') plan = diag([0, '25', '100', 0, '400']).concat([['c', '#practiceBtn'], ['a', '90'], 'A1', ['c', '#contBtn'],
+      ['a', 'No, Sana is wrong. 20% means 20 out of every 100, so 20% of 500 = 5 x 20 = 100 rupees'], 'A2', ['c', '#contBtn'], 'A3', ['a', '4200'], 'A4']);
+    if (S === 'B') plan = diag([0, '25', '20', 0, '480']).concat([['c', '#practiceBtn'], 'B0', ['a', '10'], 'B1', ['c', '#contBtn'], 'B2', ['a', '30'], 'B3']);
+    if (S === 'C') plan = diag([0, '25', '20', 0, '400']).concat([['c', '#practiceBtn'], ['a', '2'], ['c', '#contBtn'], ['a', 3], 'C1', ['c', '#contBtn'], 'C2', ['c', '#practiceBtn'], ['a', '0.2'], 'C3']);
+    if (S === 'T') plan = diag([0, '25', '20', 0, '480']).concat([['c', '#practiceBtn'], ['a', '10'],
+      ['f', function () { location.hash = '#/teacher/review'; window.dispatchEvent(new HashChangeEvent('hashchange')); $('#pin').value = '1234'; $('#pinForm').dispatchEvent(new Event('submit', { cancelable: true })); }], 'T1',
+      ['f', function () { var item = document.querySelector('.review-item'); item.querySelector('[data-open]').click(); item.querySelector('textarea').value = 'Aarav, think of ₹500 as five ₹100 notes. 20% means ₹20 back from EACH note, so 5 × 20 = ₹100.'; item.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true })); }], 'T2',
+      ['f', function () { document.querySelectorAll('[data-approve]')[0].click(); location.hash = '#/teacher'; window.dispatchEvent(new HashChangeEvent('hashchange')); }], 'T3',
+      ['f', function () { location.hash = '#/summary'; window.dispatchEvent(new HashChangeEvent('hashchange')); }], 'T4']);
+    steps(plan);
+  } catch (e) { if (e !== 0) document.body.insertAdjacentHTML('afterbegin', '<pre id="err">ERROR ' + e.stack + '</pre>'); }
+  window.scrollTo(0, 0);
+  document.documentElement.setAttribute('data-done', '1');
+};
+</script></body></html>
