@@ -41,6 +41,8 @@ window.onload = function () {
       ['a', 'No, Sana is wrong. 20% means 20 out of every 100, so 20% of 500 = 5 x 20 = 100 rupees'], 'A2', ['c', '#contBtn'], 'A3', ['a', '4200'], 'A4']);
     if (S === 'B') plan = diag([0, '25', '20', 0, '480']).concat([['c', '#practiceBtn'], 'B0', ['a', '10'], 'B1', ['c', '#contBtn'], 'B2', ['a', '30'], 'B3']);
     if (S === 'C') plan = diag([0, '25', '20', 0, '400']).concat([['c', '#practiceBtn'], ['a', '2'], ['c', '#contBtn'], ['a', 3], 'C1', ['c', '#contBtn'], 'C2', ['c', '#practiceBtn'], ['a', '0.2'], 'C3']);
+    if (S === 'M') plan = diag([0, '25', '100', 0, '400']).concat([['c', '#practiceBtn'],
+      ['f', function () { location.hash = '#/summary'; }], 'M0', ['c', '[data-concept="C4"]'], ['c', '#practiceBtn'], ['a', '20'], 'M1', ['c', '#contBtn'], ['a', '25'], 'M2']);
     if (S === 'T') plan = diag([0, '25', '20', 0, '480']).concat([['c', '#practiceBtn'], ['a', '10'],
       ['f', function () { location.hash = '#/teacher/review'; window.dispatchEvent(new HashChangeEvent('hashchange')); $('#pin').value = '1234'; $('#pinForm').dispatchEvent(new Event('submit', { cancelable: true })); }], 'T1',
       ['f', function () { var item = document.querySelector('.review-item'); item.querySelector('[data-open]').click(); item.querySelector('textarea').value = 'Aarav, think of ₹500 as five ₹100 notes. 20% means ₹20 back from EACH note, so 5 × 20 = ₹100.'; item.querySelector('form').dispatchEvent(new Event('submit', { cancelable: true })); }], 'T2',

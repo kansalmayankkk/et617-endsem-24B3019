@@ -258,6 +258,8 @@ var App = (function () {
       '<div class="grid2"><div><h3>✅ Concepts learned</h3>' + list(s.mastered, 'Keep going. Your first mastered concept is close!') + '</div>' +
       '<div><h3>🔁 Needs revision</h3>' + list(s.improve, 'Nothing to revise right now.') + '</div></div>' +
       (s.learning.length ? '<h3>📈 In progress</h3>' + list(s.learning, '') : '') +
+      '<h3>🎯 Choose a concept to practise</h3><div class="btn-row" style="margin-top:4px">' + CONCEPT_ORDER.map(function (k) {
+        var c = st.concepts[k]; return '<button class="btn" data-concept="' + k + '">' + (c.mastered ? '✓ ' : '') + CONCEPTS[k].short + ' · L' + c.level + '</button>'; }).join('') + '</div>' +
       '<h3>🧠 Mistakes the tutor helped you with</h3>' + (mis.length ? '<ul>' + mis.map(function (k) { return '<li><b>' + MISCONCEPTIONS[k].name + '</b>: seen ' + st.misconceptions[k] + ' time(s)</li>'; }).join('') + '</ul>' : '<p class="muted">No common mistakes found yet. Great!</p>') +
       '<div class="btn-row">' + (st.complete ? '' : '<button class="btn primary" id="contBtn">Continue learning →</button>') + '<a class="btn" href="#/welcome">Switch learner</a></div></div>' +
       '<div class="card"><h2>📬 Feedback from your teacher</h2>' + (fbs.length ? fbs.slice().reverse().map(function (f) {
@@ -268,6 +270,9 @@ var App = (function () {
       st.history.slice(-10).reverse().map(function (h) { return '<tr><td class="small">' + esc(Q[h.qid].prompt.slice(0, 70)) + '…</td><td class="small">' + CONCEPTS[h.concept].short + (h.diag ? ' (check)' : '') + '</td><td>' + esc(String(h.answer).slice(0, 40)) + '</td><td>' + (h.correct ? '✅' : '❌' + (h.tag ? ' ' + h.tag : '')) + '</td><td>' + h.hints + '</td></tr>'; }).join('') +
       '</table></div></div>';
     var cb = $('#contBtn'); if (cb) cb.onclick = function () { pick(st.id); };
+    app.querySelectorAll('[data-concept]').forEach(function (b) {
+      b.onclick = function () { if (!st.diag.done) { go('#/diagnostic'); return; } Engine.chooseConcept(st, b.dataset.concept); Store.save(); go('#/learn/' + b.dataset.concept); };
+    });
     updateProgress(true);
   }
 

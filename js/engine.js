@@ -244,6 +244,13 @@ var Engine = (function () {
     return o ? { text: o.text, teacher: true } : { text: MISCONCEPTIONS[tag].altExplanation, teacher: false };
   }
 
-  return { RULES: RULES, checkAnswer: checkAnswer, evaluateExplanation: evaluateExplanation, decide: decide, record: record,
+  // Learner-chosen revision: jump to a concept at its current level (exits any follow-up/prereq detour).
+  function chooseConcept(stu, concept) {
+    stu.mode = { type: 'normal' }; stu.complete = false; stu.lastDecision = null;
+    stu.current = { concept: concept, qid: pickQuestion(stu, concept, stu.concepts[concept].level) };
+    stu.pendingLesson = concept;
+  }
+
+  return { RULES: RULES, chooseConcept: chooseConcept, checkAnswer: checkAnswer, evaluateExplanation: evaluateExplanation, decide: decide, record: record,
     finishDiagnostic: finishDiagnostic, stats: stats, progressPct: progressPct, altExplanation: altExplanation, nextConcept: nextConcept, parseNum: parseNum };
 })();
