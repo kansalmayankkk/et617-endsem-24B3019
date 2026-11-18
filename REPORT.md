@@ -1,7 +1,13 @@
 # PercentPath: Examination Report (D1–D8)
 
-**ET617 End-Semester · Card P4–T9–L2–C5 · Roll No. 24B3019**
-**Live app:** https://et617-24B3019.vercel.app · **Repository:** `et617-endsem-24B3019`
+| | |
+|---|---|
+| Application | **PercentPath**: an adaptive AI-ready mathematics tutor (rule-based MVP) |
+| Examination | ET617 End-Semester · Card **P4–T9–L2–C5** |
+| Roll number (identity token) | **24B3019** |
+| Live application | https://et617-24B3019.vercel.app |
+| Source repository | https://github.com/kansalmayankkk/et617-endsem-24B3019 |
+| Date | 18 November 2026 |
 
 ---
 
@@ -75,13 +81,51 @@ Both scenarios can be reproduced with the exact keystrokes in README.md. Screens
 
 | Step | Scenario A: correct learner | Scenario B: M1 learner |
 |---|---|---|
-| Diagnostic | 5/5 → start at **level 2** of % of a quantity (`A1-*`) | Answers ₹20 for "20% of ₹500" → M1 recorded, start at level 1 |
+| Diagnostic | 5/5 → start at **level 2** of % of a quantity (`A1-correct-practise.png`) | Answers ₹20 for "20% of ₹500" → M1 recorded, start at level 1 |
 | Response | Correct numeric answer, then a correct explanation (rubric 3/3) (`A2-explanation-harder.png`) | Eggs question: answers **10** (10% → 10) (`B0-question.png`) |
 | Tutor decision | **Outcome 1: harder question**, level 3 (`A3-harder-question.png`) | **Outcome 2: alternative explanation** with ₹100-notes model, market example, 100-squares widget (`B1-M1-alt-explanation.png`) |
 | Next | Level-3 real-world item → concept mastered → next concept (`A4-concept-mastered.png`) | Targeted follow-up question (`B2-followup-question.png`) → correct → "Mistake fixed" (`B3-followup-correct.png`) |
 | Teacher | Explanation feedback queued | Remediation queued; teacher overrides it (`T1-review-queue.png`); learner sees the teacher's note (`T4-learner-sees-override.png`) |
 
+**Scenario B, variant M2:** from the Progress page the learner chooses **Profit/loss %** (`B4-summary-concept-chooser.png`). For "CP ₹160, SP ₹200: profit %?" they answer **20** (40/200). This matches M2 → Outcome 2: the "money you put in" explanation, a mandi example and the CP/SP bar widget (`B5-M2-alt-explanation.png`). They then answer the follow-up correctly (25%) (`B6-M2-followup-correct.png`).
+
 **Scenario C (Outcome 3):** two PRE errors → prerequisite decision (`C1-prereq-decision.png`) → basics lesson (`C2-prereq-lesson.png`) → check question → return (`C3-return-after-prereq.png`).
+
+### Screenshots
+
+**Scenario A: correct learner → harder questions**
+
+![A2: explanation scored 3/3, decision card shows Outcome 1 (harder question)](screenshots/A2-explanation-harder.png)
+
+![A3: level-3 harder question with "Level up" banner](screenshots/A3-harder-question.png)
+
+![A4: level-3 solved, concept mastered, next concept](screenshots/A4-concept-mastered.png)
+
+**Scenario B: M1 misconception → alternative explanation**
+
+![B1: answer 10 for 10% of 200 eggs flagged M1; alternative explanation, real example, 100-squares widget, Outcome 2 decision card](screenshots/B1-M1-alt-explanation.png)
+
+![B2: targeted follow-up question](screenshots/B2-followup-question.png)
+
+![B3: follow-up correct, mistake fixed](screenshots/B3-followup-correct.png)
+
+**Scenario B, variant M2: profit % on selling price**
+
+![B5: answer 20% flagged M2; cost-price explanation and CP/SP bar widget](screenshots/B5-M2-alt-explanation.png)
+
+**Scenario C: prerequisite instruction (Outcome 3)**
+
+![C1: two prerequisite errors, Outcome 3 decision card](screenshots/C1-prereq-decision.png)
+
+![C2: prerequisite lesson on percent, fractions and decimals](screenshots/C2-prereq-lesson.png)
+
+**Teacher-in-the-loop (C5)**
+
+![T1: review queue with pending automatic feedback, Approve/Override](screenshots/T1-review-queue.png)
+
+![T3: class dashboard with accuracy, mastered and needs-improvement concepts, misconceptions](screenshots/T3-teacher-dashboard.png)
+
+![T4: learner progress page shows the teacher's override ("Changed by teacher")](screenshots/T4-learner-sees-override.png)
 
 ## D6 – AI Functionality Specification
 **Implemented (no AI model):** every feature in the deployed app is deterministic JavaScript. The app works offline and never calls an external service, so it cannot fail because an AI service is down.
@@ -150,3 +194,35 @@ Both scenarios can be reproduced with the exact keystrokes in README.md. Screens
   - Explanation rubric ≥ 2/3 for ≥ 70% of learners.
   - Teachers review ≥ 90% of queued feedback within 24 h, and rate the dashboard as useful (≥ 4/5) in a short survey.
   - Average session fits within 25 minutes.
+
+---
+
+## Appendix A – Requirement Traceability
+| Requirement (exam card) | Where implemented | Evidence |
+|---|---|---|
+| Topic: Percentages, discounts, profit and loss (Class 8) | `js/content.js` concepts C0–C4, 44 items | `C2-prereq-lesson.png`, D3 |
+| 3 formats: MCQ, numeric, explanation | `app.js questionHTML`, `engine.js checkAnswer / evaluateExplanation` | `A1`, `A2`, `B0` |
+| Explanation evaluation + misconception diagnosis | Keyword rubric 0–3; trap values → M1/M2/PRE | `A2`, `T1` (Sameer, M2) |
+| Outcome 1: harder question | `engine.js decide` rule 3 | `A3`, `A4` |
+| Outcome 2: alternative explanation + real example + follow-up | Rule 2, `MISCONCEPTIONS`, `FOLLOWUPS` | `B1`–`B3`, `B5`, `B6` |
+| Outcome 3: prerequisite instruction | Rule 1, C0 lesson + check question + return | `C1`–`C3` |
+| Decision rule communicated | "Why this next?" card + About rule table | every feedback screenshot, `02-about.png` |
+| M1 in questions, logic, feedback and pathways | Traps (e.g. 20 → M1), M1 feedback, alt explanation, follow-ups | `B1` |
+| M2 in questions, logic, feedback and pathways | Traps (e.g. 20% → M2), rubric M2 tag, CP-bar remediation | `B5`, `T1` |
+| Tracking: correct/incorrect, difficulty, misconceptions, hints, history, progress | `history[]`, `concepts{}`, `misconceptions{}` in `store.js` | Summary page, `T3` |
+| Hints without revealing answers; immediate feedback | 2 graded hints per item; feedback panel | all question screenshots |
+| Progress indicator + summary of learned / to revise | Top bar + concept chips; `summary()` | `T4`, `B4` |
+| Screens 1–9 | Welcome, Diagnostic, Learn, Practice, Feedback/remediation, Summary, Teacher dashboard, Review, About | `01`, `A1`, `C2`, `B1`, `T4`, `T3`, `T1`, `02` |
+| C5 (1–4): progress overview, attempts & accuracy, mastered / needs improvement, misconceptions | `teacher.js dashboard` | `T3` |
+| C5 (5–7): pending feedback, approve, override | `teacher.js review`, `Store.approve / override` | `T1` |
+| C5 (8): record of approvals and overrides | `auditLog` table | Review page (bottom) |
+| Learner sees teacher-approved / overridden feedback | Badges, "Teacher says" notes, optional global template override | `T4` |
+| Simulated student dataset | `store.js seed()`: Priya, Rohan, Fatima, Sameer | `T3` |
+| Rule-based, honestly labelled; AI only proposed | About honesty statement, footer, D6 | `02-about.png` |
+| Works when an AI service fails | No external calls; D6 fallback | D6 |
+| Identity token on every screen | Shared footer "Roll No: 24B3019" | all screenshots |
+| About screen | `about()` | `02-about.png` |
+| Repo `et617-endsem-24B3019`, public deployment, no API keys, meaningful commits | GitHub + Vercel; `git log` | links on the cover |
+
+## Appendix B – Reproducing the screenshots
+Every screenshot was captured from the real application. A scripted driver (`tools/shot.html`) performs the exact learner inputs listed in README.md in headless Microsoft Edge. The same inputs typed by hand on the live site give the same screens, because question order is deterministic.

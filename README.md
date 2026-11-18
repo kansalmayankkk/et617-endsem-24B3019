@@ -53,3 +53,7 @@ Seeded sample learners: Priya (strong), Rohan (M1), Fatima (prerequisite gap), S
 
 ## AI honesty
 No AI model is used. All adaptivity is transparent rule-based JavaScript. The proposed LLM features are specified in REPORT.md D6.
+
+**Scenario B, variant M2:** after the diagnostic, open **Progress** and tap **Profit/loss %**. Then tap **I am ready**, type **`20`** (M2 → Outcome 2 with the CP/SP bars), and answer the follow-up with `25`.
+
+**Note:** `tools/shot.html` is a test driver that replays these scenarios to produce `screenshots/`. It is not part of the learner UI.
